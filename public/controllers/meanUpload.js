@@ -4,21 +4,39 @@ angular.module('mean.upload').controller('MeanUploadController', ['$scope', 'Glo
   function($scope, Global, MeanUpload) {
     $scope.global = Global;
     $scope.images = [];
-    $scope.files = [];
+
     $scope.package = {
         name: 'mean-upload'
     };
 
     $scope.images = [];
 
+
+   $scope.deleteImage = function() {
+      $scope.images = [];
+      $scope.errorMessages = " ";
+     $scope.slides = [];
+     };
+
+
     $scope.uploadFileCallback = function(file) {
-      if (file.type.indexOf('image') !== -1){
+    $scope.errorMessages = [];
+       console.log('length images'+ $scope.images.length);
+
+
+      if ($scope.images.length === 0 && file.type.indexOf('image') !== -1) {
+          $scope.errorMessages = " ";
           $scope.images.push(file);
           $scope.addSlide(file.src);
-      }
-      else{
-          $scope.files.push(file);
-      }
+          }
+      else if ($scope.images.length === 1 && file.type.indexOf('image') !== -1) {
+          $scope.errorMessages.push('More Than One Image Not Allowed');
+          } else {
+            $scope.errorMessages.push('File Type Not Allowed');
+             $scope.images = []
+                  }
+
+   console.log('length images at exit'+ $scope.images.length);
     };
 
     $scope.uploadFinished = function(files) {
